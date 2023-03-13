@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 
 function App() {
   const [record, setRecord] = useState([]);
+  const [show, setShow] = useState(false);
   const [modaldata, setModaldata] = useState({
     id: "",
     name: "",
@@ -27,22 +28,24 @@ function App() {
   const showDetail = (id) => {
     fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
       .then((resposne) => resposne.json())
-      .then((res) => setModaldata(res))
-      .then(() => {
+      .then((res) => {
+        setModaldata(res);
         Swal.fire({
           width: 420,
-          title: modaldata.name,
+          title: res.name,
           html: `
             <div class="poupop">
-            <p><b><hr />ID:</b> ${modaldata.id}</p>
-            <p><b><hr />Name:</b> ${modaldata.name}</p>
-            <p><b><hr />Username:</b> ${modaldata.username}</p>
-            <p><b><hr />Email:</b> ${modaldata.email}</p>
-            <p><b><hr />Phone:</b> ${modaldata.phone}</p>
-            <p><b><hr />Website:</b> ${modaldata.website}</p>
+            <h4>Row No : ${res.id}</h4>
+            <p><hr>ID: ${res.id}</p>
+            <p><hr>Name: ${res.name}</p>
+            <p><hr>Username: ${res.username}</p>
+            <p><hr>Email: ${res.email}</p>
+            <p><hr>Phone: ${res.phone}</p>
+            <p><hr>Website: ${res.website}</p>
             <hr />
             </div>
           `,
+          onClose: () => setShow(true)
         });
       });
   };
@@ -71,7 +74,8 @@ function App() {
                 <td className="border py-2">{names.username}</td>
                 <td className="border py-2">
                   <button
-                    onClick={() => showDetail(names.id)}
+                    onClick={() => {
+                      showDetail(names.id)}}
                     className="w-[200px] bg-[#7066E0] hover:bg-[#887ff0] text-gray-800 font-semibold py-2 px-4 border-none rounded shadow"
                   >
                     Get Details
@@ -85,5 +89,7 @@ function App() {
     </div>
   );
 }
+
+
 
 export default App;
